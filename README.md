@@ -1,4 +1,4 @@
-# SFX HELPER – Krita docker
+# SFX Helper – Krita docker
 
 A dockable panel for Krita 5.x that quickly drops styled manga **SFX** (sound
 effects) with an outline onto a **vector layer** – without setting the font,
@@ -84,6 +84,11 @@ small panel where you can:
 **Reset layout** restores the defaults. Your choices are remembered across
 restarts. The docker is in a scroll area, so hiding or resizing parts never
 clips anything.
+
+The docker also **adapts to the dock width** (like TypeR): drag the dock
+narrower or wider and the controls follow. The font dropdown and the rule /
+suggestion buttons no longer force a fixed wide minimum — long rule labels are
+shortened (the full text stays in the tooltip), so a narrow dock stays usable.
 
 ---
 
