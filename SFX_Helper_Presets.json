@@ -1,0 +1,282 @@
+{
+  "manga_sfx": 1,
+  "presets": [],
+  "font_rules": [
+    {
+      "group": "Normal",
+      "keywords": [
+        "hm",
+        "hmm",
+        "ah",
+        "uh",
+        "poke",
+        "stare",
+        "smile",
+        "grin",
+        "pat",
+        "chomp",
+        "nod"
+      ],
+      "fonts": [
+        "CC Wild Words",
+        "Anime Ace"
+      ]
+    },
+    {
+      "group": "Loud",
+      "keywords": [
+        "yell",
+        "shout",
+        "hey",
+        "oi",
+        "gah",
+        "ah"
+      ],
+      "fonts": [
+        "Bitumen",
+        "CCShoutOut Heavy"
+      ]
+    },
+    {
+      "group": "Quiet",
+      "keywords": [
+        "oh",
+        "murmur",
+        "...",
+        "huh?"
+      ],
+      "fonts": [
+        "CCWildWordsLower Italic",
+        "Anime Ace Italic"
+      ]
+    },
+    {
+      "group": "Shy/Stutter",
+      "keywords": [
+        "uhm",
+        "eh",
+        "uh",
+        "um",
+        "s-sorry",
+        "w-wait",
+        "e-eh"
+      ],
+      "fonts": [
+        "SS Bestagon"
+      ]
+    },
+    {
+      "group": "Scared",
+      "keywords": [
+        "chill",
+        "shiver",
+        "tremble",
+        "shake",
+        "gulp"
+      ],
+      "fonts": [
+        "CCEvilDoings",
+        "CCRoughTongue",
+        "Another"
+      ]
+    },
+    {
+      "group": "Impact",
+      "keywords": [
+        "bam",
+        "wham",
+        "thud",
+        "smack",
+        "whack"
+      ],
+      "fonts": [
+        "CCBattleCry",
+        "CCBackBeat"
+      ]
+    },
+    {
+      "group": "Angry",
+      "keywords": [
+        "grr",
+        "growl",
+        "snarl",
+        "rage",
+        "slam",
+        "stomp",
+        "tsk"
+      ],
+      "fonts": [
+        "CCShoutOut Heavy",
+        "CCBattleCry",
+        "Bitumen"
+      ]
+    },
+    {
+      "group": "Whisper",
+      "keywords": [
+        "psst",
+        "whisper",
+        "mutter",
+        "murmur",
+        "faint"
+      ],
+      "fonts": [
+        "CCWildWordsLower Italic",
+        "Anime Ace Italic"
+      ]
+    },
+    {
+      "group": "Shock",
+      "keywords": [
+        "gasp",
+        "eh",
+        "huh",
+        "what",
+        "?!",
+        "ngh"
+      ],
+      "fonts": [
+        "CCShoutOut Heavy",
+        "CCBattleCry"
+      ]
+    },
+    {
+      "group": "Crying",
+      "keywords": [
+        "sob",
+        "sniff",
+        "waa",
+        "hic",
+        "sobbing",
+        "cry"
+      ],
+      "fonts": [
+        "CCEvilDoings",
+        "CCRoughTongue"
+      ]
+    },
+    {
+      "group": "Mechanical",
+      "keywords": [
+        "click",
+        "clack",
+        "beep",
+        "buzz",
+        "vrr",
+        "whirr",
+        "ring",
+        "tick",
+        "clink"
+      ],
+      "fonts": [
+        "CCBackBeat",
+        "Bitumen"
+      ]
+    },
+    {
+      "group": "Heartbeat",
+      "keywords": [
+        "thump",
+        "ba-dump",
+        "ba-thump",
+        "doki",
+        "doki doki"
+      ],
+      "fonts": [
+        "CCWildWordsLower Italic",
+        "Another"
+      ]
+    },
+    {
+      "group": "Explosion",
+      "keywords": [
+        "boom",
+        "kaboom",
+        "crash",
+        "bang",
+        "blam",
+        "ka-boom"
+      ],
+      "fonts": [
+        "CCBattleCry",
+        "Bitumen",
+        "CCShoutOut Heavy"
+      ]
+    },
+    {
+      "group": "Cute",
+      "keywords": [
+        "giggle",
+        "hehe",
+        "fufu",
+        "sparkle",
+        "kyaa",
+        "teehee"
+      ],
+      "fonts": [
+        "CC Wild Words",
+        "Anime Ace"
+      ]
+    },
+    {
+      "group": "Dark",
+      "keywords": [
+        "creak",
+        "drip",
+        "haunt",
+        "ominous",
+        "eerie",
+        "silence"
+      ],
+      "fonts": [
+        "CCEvilDoings",
+        "CCRoughTongue"
+      ]
+    },
+    {
+      "group": "Speed",
+      "keywords": [
+        "whoosh",
+        "fwsh",
+        "dash",
+        "zoom",
+        "swoosh",
+        "swish"
+      ],
+      "fonts": [
+        "CCBackBeat",
+        "CCBattleCry"
+      ]
+    },
+    {
+      "group": "Eating",
+      "keywords": [
+        "nom",
+        "munch",
+        "chomp",
+        "gulp",
+        "slurp",
+        "chew"
+      ],
+      "fonts": [
+        "CC Wild Words",
+        "Anime Ace"
+      ]
+    },
+    {
+      "group": "Footsteps",
+      "keywords": [
+        "tap",
+        "step",
+        "pat",
+        "clop",
+        "thump",
+        "stomp"
+      ],
+      "fonts": [
+        "CCBackBeat",
+        "CC Wild Words"
+      ]
+    }
+  ]
+}
