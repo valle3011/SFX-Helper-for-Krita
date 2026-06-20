@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Service
-ServiceTypes=Krita/PythonPlugin
-X-KDE-Library=mangasfx
-X-Python-2-Compatible=false
-Name=Manga SFX Typesetter
-Comment=Schnelles Typesetting von Manga-SFX mit Outline (Vektor-Ebene)
