@@ -82,6 +82,16 @@ punctuation and the hyphen in doubled SFX are normalized away). Short
 exclamations like `ow`, `eh` or `grr` match only as the whole word, so they
 don't fire inside `pow`, `the` or `grab`.
 
+**Guess for unknown SFX (new).** If a word matches no rule at all, the docker
+falls back to a **sound-pattern heuristic** and still proposes a fitting group
+(e.g. invented words: `DKKBAM` → Boom, `fwooosh` → Whoosh, `iiiieee` → Scream,
+`zzzz` → Sleep). The header then reads *"Best guess for this word"*.
+
+**Learns from you (new).** Whenever you insert an SFX, the docker remembers
+which font you picked for that word. Next time you type the same word, that font
+is offered first under *"Used before"*. This is stored in Krita's settings and
+survives restarts (at most 8 fonts per word).
+
 > These rules reference the **Blambot comic SFX fonts** (BadaBoom, Blambot
 > FXPro, Astounder, Brushzerker, …). For Krita to actually render them, the
 > fonts must be **installed in your system**. If one isn't installed, the
