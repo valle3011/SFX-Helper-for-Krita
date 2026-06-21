@@ -4,13 +4,21 @@ A dockable panel for Krita 5.x that quickly drops styled manga **SFX** (sound
 effects) with an outline onto a **vector layer** – without setting the font,
 color and outline by hand every time.
 
+> The plugin's folder, library id (`mangasfx`) and saved settings group stay
+> unchanged for compatibility; only the **display name** is "SFX Helper".
+
 ## Features
 - Text field for the SFX word
 - Font dropdown with every installed font (searchable) + a favorites list
 - Inputs for font size, fill color, outline color and outline width
-- Preset buttons (font + color + outline in one click)
+- **Optional drop shadow** (new): color + X/Y offset
+- **WYSIWYG live preview** (new): shows the text with the actual **outline and
+  shadow** (not just fill), fitted to the preview area
+- Preset buttons (font + color + outline + shadow in one click)
 - **Insert SFX** -> builds SVG text and adds it to the active vector layer via
-  `addShapesFromSvg` (creating the layer automatically if needed)
+  `addShapesFromSvg` (creating the layer automatically if needed). The text is
+  now placed **centered** – in the middle of the active **selection** if there
+  is one, otherwise the middle of the image (no more top-left corner).
 - **Built-in smart font suggestions** (new): out of the box, typing an SFX word
   suggests matching fonts grouped by mood (see *Built-in SFX rules* below). You
   can still add your own rules on top.
@@ -31,28 +39,48 @@ color and outline by hand every time.
 
 ## Built-in SFX rules (smart suggestions)
 
-The plugin now ships with a set of **built-in font rules**. As soon as you type
-an SFX word, it suggests fitting fonts, grouped by what kind of sound it is:
+The plugin ships with a **large set of built-in font rules** — **29 groups**
+covering **400+ SFX words** (English *and* romanized Japanese). As soon as you
+type an SFX word, it suggests fitting fonts, grouped by what kind of sound it is:
 
-| Group | Example words | Suggested fonts |
+| Group | Example words | First suggested font |
 | --- | --- | --- |
-| Boom / Impact | boom, kaboom, bam, blam, blast, *doon* | BadaBoom Pro BB, A.C.M.E. Explosive, Astounder Squared BB |
-| Hit / Punch | pow, smack, thud, *doki*, *baki* | BeatDown BB, Astounder Squared BB |
-| Crash / Break | crash, smash, crack, *gashan*, *gachan* | Autodestruct BB, A.C.M.E. Explosive |
-| Slash / Cut | slash, slice, shing, *zan*, *zubaa* | Brushzerker BB, Armor Piercing BB |
-| Gun / Metal | shot, clang, ping, *kakin*, *gakin* | Bulletproof BB, Armor Piercing BB |
-| Electric / Energy | zap, buzz, spark, *bachi*, *biri* | BlackHole BB, Android Nation BB |
-| Sci-fi / Tech | beep, boop, whirr, mecha, robot | Android Nation BB, Astrogator BB |
-| Magic / Glow | glow, sparkle, *kira*, *pika*, *fuwa* | Arcanum BB, Astounder Round BB |
-| Shout / Loud | shout, roar, *gyaa*, *uwaa*, *gao* | Always Angry BB, BigBadBold BB |
-| Horror / Scary | scream, blood, drip, *doku*, *zawa* | BloodyMurder BB, Afterlife BB |
-| Monster / Zombie | groan, growl, *braain*, *ghaa* | Braaains BB, Afterlife BB |
-| Soft / Quiet | whisper, hush, mutter, *koso*, *suya* | Blambot Casual, Anime Ace 2.0 BB |
-| Cute / Light | pop, poof, tap, *pomf*, *pyon* | Astounder Round BB, Blambot Casual |
+| Boom / Explosion | boom, kaboom, blast, *don*, *dokan* | BadaBoom Pro BB |
+| Hit / Punch | pow, smack, thud, knock, *doga* | BeatDown BB |
+| Crash / Break | crash, smash, crack, *gasha*, *bakin* | Autodestruct BB |
+| Slash / Cut / Tear | slash, slice, stab, snap, rip, *zan* | Brushzerker BB |
+| Gunfire | shot, gun, ratatat, ping | Bulletproof BB |
+| Metal / Clang / Click | clang, click, clack, *gatan*, *gakin* | Armor Piercing BB |
+| Whoosh / Dash | whoosh, swoosh, dash, rush, *suu* | Blowhole BB |
+| Jump / Fall / Slide | hop, jump, bounce, fall, slide | ActionFigure BB |
+| Friction / Creak | creak, screech, grind, scrape | AtlandSketches BB |
+| Rumble / Shake | rumble, rattle, quake, *gogo*, *goro* | Autodestruct BB |
+| Engine / Electronic | beep, buzz, vroom, ring, *brrring* | Android Nation BB |
+| Electric / Spark | zap, spark, flash, *biri*, *pachi* | BlackHole BB |
+| Sparkle / Shine / Magic | sparkle, *kira*, *pika*, twinkle | Arcanum BB |
+| Water / Liquid | splash, drip, gush, *basha*, *poro* | Blowhole BB |
+| Eating / Mouth | munch, chomp, slurp, gulp, *zuru* | Blambot Casual |
+| Cry / Sob | sob, waaah, wail, cry, sniff | Blambot Casual |
+| Breath / Sleep | gasp, pant, snore, sleep, *zzz* | Blambot Casual |
+| Whisper / Silence | whisper, hush, psst, *koso*, *shiin* | Anime Ace 2.0 BB |
+| Laugh / Smile | haha, giggle, *fufu*, *niko*, *niyari* | Blambot Casual |
+| Roar / Growl | roar, growl, grr, snarl, *gao* | Always Angry BB |
+| Scream / Shout | scream, yell, *gyaa*, *kyaa*, *uwaa* | Always Angry BB |
+| Reaction | eek, ack, ugh, ow, *gaan* | ActionFigure BB |
+| Heartbeat / Tension / Stare | *doki*, *kyun*, *zawa*, stare, *jii* | Astounder Squared BB |
+| Touch / Grab / Soft | grab, hug, pet, *peta*, *fuwa*, *mofu* | Astounder Round LC BB |
+| Pop / Bounce | pop, poof, boing, *pon*, *pyon* | Astounder Round BB |
+| Flutter / Flap | flutter, rustle, flap, *basa*, *batan* | Astounder Round LC BB |
+| Footsteps / Taps | tap, step, *tok*, patter, stomp | Blambot Casual |
+| Clap / Cheer | clap, cheer, yay, hooray, ta-da | ActionFigure BB |
+| Animal | meow, woof, *nyaa*, chirp, croak | Blambot Casual |
 
-Both English and **romanized Japanese onomatopoeia** are recognized, and the
-matching is **elongation-aware**: `BOOM`, `BOOOOM` and `ka-boom!` all match the
-same rule (repeated letters and punctuation are normalized away).
+Both English and **romanized Japanese onomatopoeia** (*italic* above) are
+recognized, and the matching is **elongation-aware**: `BOOM`, `BOOOOM`,
+`ka-boom!` and `boom-boom` all match the same rule (repeated letters,
+punctuation and the hyphen in doubled SFX are normalized away). Short
+exclamations like `ow`, `eh` or `grr` match only as the whole word, so they
+don't fire inside `pow`, `the` or `grab`.
 
 > These rules reference the **Blambot comic SFX fonts** (BadaBoom, Blambot
 > FXPro, Astounder, Brushzerker, …). For Krita to actually render them, the
@@ -118,10 +146,10 @@ shortened (the full text stays in the tooltip), so a narrow dock stays usable.
 
 5. **Enable the plugin**
    *Settings ▸ Configure Krita… ▸ Python Plugin Manager* -> tick
-   **"Manga SFX Typesetter"** -> OK -> **restart Krita again**.
+   **"SFX Helper"** -> OK -> **restart Krita again**.
 
 6. **Show the docker**
-   *Settings ▸ Dockers ▸ Manga SFX*.
+   *Settings ▸ Dockers ▸ SFX Helper*.
 
 > Note: this needs a Python-enabled build of Krita (the regular Windows build
 > from krita.org is, by default).
@@ -130,10 +158,12 @@ shortened (the full text stays in the tooltip), so a narrow dock stays usable.
 
 ## Usage
 1. Have a document open and type the SFX word.
-2. Choose font / size / colors **or** click a preset.
+2. Choose font / size / colors / shadow **or** click a preset. The **live
+   preview** shows exactly how it will look (with outline + shadow).
 3. **Insert SFX** (or press Enter in the text field).
    If no vector layer is active, a layer named "SFX" is created automatically.
-   The text appears in the top-left – move it freely afterwards.
+   The text is placed **centered** (in the active selection if there is one,
+   otherwise in the middle of the image) – move/transform it freely afterwards.
 
 ---
 
@@ -209,8 +239,11 @@ The plugin sets the text cleanly – the artistic placement stays your job:
   *Warp*, *Cage* or *Perspective*. Tip: for a strong warp, first right-click the
   SFX layer and *Convert to Paint Layer* (rasterize); it then distorts more
   reliably.
-- **Polish:** gradient/glow on the fill, a double outline, a drop shadow – as
-  additional layer effects.
+- **Polish:** gradient/glow on the fill or a double outline – as additional
+  layer effects. (A basic **drop shadow** is now built in.)
+
+> Performance note: the list of system fonts is read **once and cached**, so the
+> docker stays responsive even with very large font collections.
 
 ---
 
