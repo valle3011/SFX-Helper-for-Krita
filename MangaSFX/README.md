@@ -108,6 +108,26 @@ you can add your own rules next to them, and your rules can extend a built-in
 group. To change the rule set itself, edit `SFX_RULES` in
 [`mangasfx/config.py`](mangasfx/config.py).
 
+### Rules are per language (new)
+
+Every rule belongs to **one language**. A **Rule language** dropdown (in the
+Font suggestions section) decides which rules are shown *and* active: only rules
+of the selected language take effect when you type. So German rules
+(`BUMM`, `KRACH`, `PENG` …) only fire when German is selected, Spanish rules
+(`PUM`, `PAF` …) only under Spanish, etc. The default rule language follows the
+interface language but can be changed independently. New rules you add are
+tagged with the current rule language; your old rules (made before this change)
+stay visible in every language.
+
+**Romanized Japanese onomatopoeia** (`doki`, `gashan`, `zan` …) are tagged
+`"*"` (universal) so they keep working in **every** language. Built-in rule sets
+ship for **English, German and Spanish**; more can be added in `SFX_RULES` by
+giving each rule a `"lang"`.
+
+The interface itself is available in **English, German, Spanish, French,
+Portuguese and Italian**; languages beyond EN/DE are core-translated and fall
+back to English for the rest.
+
 ---
 
 ## Layout & sizes (customizing the docker)

@@ -240,3 +240,115 @@ SFX_RULES = [
                   "chirp", "tweet", "caw", "hoot", "croak", "ribbit"],
      "fonts": ["Blambot Casual", "Astromonkey"]},
 ]
+
+# ---------------------------------------------------------------------------
+# Sprache der Regeln
+#
+# Jede Regel gehört zu EINER Sprache ("lang"). Im Docker ist immer eine
+# Regelsprache aktiv; nur Regeln dieser Sprache werden angezeigt und wirken.
+# Der Spezialwert "*" heißt "immer aktiv, sprachübergreifend" – damit bleiben
+# die romanisierten japanischen Onomatopöie (doki, gashan, zan …) in JEDER
+# Sprache verfügbar (Manga-SFX werden weltweit oft romaji geschrieben).
+#
+# Die obigen, englisch beschrifteten Regeln werden hier als "en" markiert;
+# danach folgen die universellen Romaji-Regeln ("*") sowie eingebaute Regelsätze
+# für Deutsch ("de") und Spanisch ("es"). Eigene Regeln im Docker bekommen die
+# gerade aktive Regelsprache. (Romaji bewusst als "*" statt "ja", damit sie
+# nicht verschwinden, wenn man eine andere Sprache wählt.)
+# ---------------------------------------------------------------------------
+
+for _r in SFX_RULES:                       # bestehende Regeln sind Englisch
+    _r.setdefault("lang", "en")
+
+SFX_RULES += [
+    # --- Universell: romanisierte japanische Onomatopöie (immer aktiv) -----
+    {"group": "JP Impact", "lang": "*",
+     "keywords": ["don", "dokan", "dosun", "doshin", "dogan", "gogo", "goro"],
+     "fonts": ["BadaBoom Pro BB", "Astounder Squared BB"]},
+    {"group": "JP Hit", "lang": "*",
+     "keywords": ["doki", "doka", "baki", "doga", "gotsu", "gusha", "boko"],
+     "fonts": ["BeatDown BB", "Astounder Squared BB"]},
+    {"group": "JP Crash", "lang": "*",
+     "keywords": ["gasha", "gashan", "gachan", "bakin", "pakin", "bari"],
+     "fonts": ["Autodestruct BB", "A.C.M.E. Explosive"]},
+    {"group": "JP Slash", "lang": "*",
+     "keywords": ["zan", "zash", "giri", "suba", "shaki"],
+     "fonts": ["Brushzerker BB", "Armor Piercing BB"]},
+    {"group": "JP Metal", "lang": "*",
+     "keywords": ["gakin", "gokin", "kaan", "kiin", "gatan", "gacha"],
+     "fonts": ["Armor Piercing BB", "Android Nation BB"]},
+    {"group": "JP Electric", "lang": "*",
+     "keywords": ["biri", "bachi", "pachi", "bishi"],
+     "fonts": ["BlackHole BB", "Android Nation BB"]},
+    {"group": "JP Sparkle", "lang": "*",
+     "keywords": ["kira", "pika", "gira"],
+     "fonts": ["Arcanum BB", "Astounder Round BB"]},
+    {"group": "JP Heartbeat", "lang": "*",
+     "keywords": ["doki", "kyun", "piku", "bikun", "zawa"],
+     "fonts": ["Astounder Squared BB", "Afterlife BB"]},
+    {"group": "JP Soft", "lang": "*",
+     "keywords": ["peta", "beta", "fuwa", "mofu", "pyon", "pon", "sara",
+                  "koso", "niko"],
+     "fonts": ["Blambot Casual", "Astounder Round BB"]},
+    {"group": "JP Water", "lang": "*",
+     "keywords": ["basha", "pasha", "poro", "pota", "gutsu"],
+     "fonts": ["Blowhole BB", "Astounder Round BB"]},
+    {"group": "JP Silence", "lang": "*",
+     "keywords": ["shiin", "shin"],
+     "fonts": ["Afterlife BB", "Background Echo"]},
+
+    # --- Deutsch -----------------------------------------------------------
+    {"group": "Knall", "lang": "de",
+     "keywords": ["bumm", "bum", "peng", "pang", "wumm", "rumms", "kawumm",
+                  "päng", "wamm"],
+     "fonts": ["BadaBoom Pro BB", "A.C.M.E. Explosive", "Astounder Squared BB"]},
+    {"group": "Schlag", "lang": "de",
+     "keywords": ["bums", "klatsch", "patsch", "zack", "batsch", "plopp",
+                  "knuff"],
+     "fonts": ["BeatDown BB", "Astounder Squared BB"]},
+    {"group": "Krachen", "lang": "de",
+     "keywords": ["krach", "splitter", "knack", "ratsch", "klirr", "bersten"],
+     "fonts": ["Autodestruct BB", "A.C.M.E. Explosive"]},
+    {"group": "Metall", "lang": "de",
+     "keywords": ["kling", "klong", "scheppern", "klimper", "klong"],
+     "fonts": ["Armor Piercing BB", "Android Nation BB"]},
+    {"group": "Wusch", "lang": "de",
+     "keywords": ["wusch", "schwupp", "zisch", "sausen", "flitz", "wuff"],
+     "fonts": ["Blowhole BB", "BlackHole BB"]},
+    {"group": "Schrei", "lang": "de",
+     "keywords": ["aaah", "waaah", "hilfe", "brüll", "kreisch", "röhr", "argh"],
+     "fonts": ["Always Angry BB", "BigBadBold BB"]},
+    {"group": "Leise", "lang": "de",
+     "keywords": ["flüster", "psst", "schnief", "schluchz", "murmel", "tapp",
+                  "klopf", "schnarch"],
+     "fonts": ["Blambot Casual", "Anime Ace 2.0 BB"]},
+    {"group": "Lachen", "lang": "de",
+     "keywords": ["haha", "hihi", "hoho", "kicher", "gröl", "grins"],
+     "fonts": ["Blambot Casual", "Astromonkey"]},
+
+    # --- Spanisch ----------------------------------------------------------
+    {"group": "Explosión", "lang": "es",
+     "keywords": ["bum", "bam", "pum", "cataplum", "catapum", "buum", "boom"],
+     "fonts": ["BadaBoom Pro BB", "A.C.M.E. Explosive", "Astounder Squared BB"]},
+    {"group": "Golpe", "lang": "es",
+     "keywords": ["pam", "paf", "zas", "plaf", "toma", "cataplaf", "zasca"],
+     "fonts": ["BeatDown BB", "Astounder Squared BB"]},
+    {"group": "Romper", "lang": "es",
+     "keywords": ["crac", "cras", "plas", "crunch", "chas"],
+     "fonts": ["Autodestruct BB", "A.C.M.E. Explosive"]},
+    {"group": "Metal", "lang": "es",
+     "keywords": ["clin", "clon", "tolon", "tilin", "ñiqui"],
+     "fonts": ["Armor Piercing BB", "Android Nation BB"]},
+    {"group": "Veloz", "lang": "es",
+     "keywords": ["fiu", "zum", "fium", "swoosh", "shht"],
+     "fonts": ["Blowhole BB", "BlackHole BB"]},
+    {"group": "Grito", "lang": "es",
+     "keywords": ["aaah", "aaay", "socorro", "grr", "guaaa", "buaaa"],
+     "fonts": ["Always Angry BB", "BigBadBold BB"]},
+    {"group": "Suave", "lang": "es",
+     "keywords": ["psst", "shh", "snif", "muac", "toc", "ronc", "glup"],
+     "fonts": ["Blambot Casual", "Anime Ace 2.0 BB"]},
+    {"group": "Risa", "lang": "es",
+     "keywords": ["jaja", "jiji", "jeje", "muajaja", "joro"],
+     "fonts": ["Blambot Casual", "Astromonkey"]},
+]

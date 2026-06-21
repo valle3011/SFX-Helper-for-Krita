@@ -31,7 +31,15 @@ from .presets_store import (
     load_user_presets, save_user_presets, load_font_rules, save_font_rules,
     load_language, save_language, load_settings, save_settings,
     load_view, save_view, load_usage, save_usage,
+    load_rule_lang, save_rule_lang,
 )
+
+# Sprachen, für die SFX-Regeln gewählt werden können (Endonyme fürs Dropdown).
+RULE_LANGS = ("en", "de", "es", "fr", "pt", "it")
+RULE_LANG_NAMES = {
+    "en": "English", "de": "Deutsch", "es": "Español",
+    "fr": "Français", "pt": "Português", "it": "Italiano",
+}
 from .i18n import tr, LANGUAGES
 
 
@@ -285,9 +293,18 @@ class MangaSFXDocker(DockWidget):
         self._view = self._load_view_merged()     # Layout-/Anzeige-Einstellungen
         self._families_cache = None               # System-Fonts nur einmal laden
         self._usage = load_usage()                # gelernte Wort->Font-Häufigkeit
-        self._group_fonts_cache = None            # Gruppenname -> Fonts
+        self._group_fonts_cache = None            # Gruppenname -> Fonts (gefiltert)
+        self._rule_lang = self._load_rule_lang_merged()  # aktive Regelsprache
         self.setWindowTitle(self.t("window_title"))
         self._build_ui()
+
+    def _load_rule_lang_merged(self):
+        """Gespeicherte Regelsprache; sonst die UI-Sprache (falls Regeln dafür
+        denkbar sind), sonst Englisch."""
+        saved = load_rule_lang(default="")
+        if saved in RULE_LANGS:
+            return saved
+        return self._lang if self._lang in RULE_LANGS else "en"
 
     def _families(self):
         """Liste aller System-Font-Familien – nur EINMAL ermitteln und cachen.
@@ -519,6 +536,19 @@ class MangaSFXDocker(DockWidget):
         rlv.setContentsMargins(0, 0, 0, 0)
         self.sec_rules.setLayout(rlv)
         rlv.addWidget(self._heading(self.t("font_suggestions")))
+        # Regelsprache: nur Regeln dieser Sprache (+ "*") werden gezeigt/aktiv.
+        rl_row = QHBoxLayout()
+        self.lbl_rule_lang = QLabel(self.t("rule_lang"))
+        rl_row.addWidget(self.lbl_rule_lang)
+        self.rule_lang_combo = QComboBox()
+        for code in RULE_LANGS:
+            self.rule_lang_combo.addItem(RULE_LANG_NAMES.get(code, code), code)
+        ri = self.rule_lang_combo.findData(self._rule_lang)
+        self.rule_lang_combo.setCurrentIndex(ri if ri >= 0 else 0)
+        self.rule_lang_combo.currentIndexChanged.connect(self._on_rule_lang_changed)
+        self._make_shrinkable(self.rule_lang_combo)
+        rl_row.addWidget(self.rule_lang_combo, 1)
+        rlv.addLayout(rl_row)
         rules_hint = QLabel(self.t("rules_hint"))
         rules_hint.setWordWrap(True)
         rlv.addWidget(rules_hint)
@@ -1154,13 +1184,30 @@ class MangaSFXDocker(DockWidget):
             pass
 
     def _all_rules(self):
-        """(rule, is_builtin) für eingebaute (config.py) + eigene Regeln.
+        """(rule, is_builtin) für eingebaute + eigene Regeln – aber NUR die der
+        aktiven Regelsprache (plus die sprachübergreifenden "*"-Regeln).
 
         Für eigene Regeln wird das Original-Dict zurückgegeben, damit
         Bearbeiten/Löschen über die Identität weiter funktioniert."""
-        rules = [(r, True) for r in SFX_RULES]
-        rules += [(r, False) for r in self._font_rules]
+        active = self._rule_lang
+
+        def ok(r):
+            lang = r.get("lang", "*")
+            return lang == "*" or lang == active
+
+        rules = [(r, True) for r in SFX_RULES if ok(r)]
+        rules += [(r, False) for r in self._font_rules if ok(r)]
         return rules
+
+    def _on_rule_lang_changed(self, _idx):
+        """Regelsprache gewechselt: speichern, Regel-Liste + Vorschläge neu."""
+        code = self.rule_lang_combo.currentData()
+        if not code or code == self._rule_lang:
+            return
+        self._rule_lang = code
+        save_rule_lang(code)
+        self._rebuild_rules()
+        self._refresh_suggestions(self.text_input.text())
 
     def _suggested_groups(self, text):
         """[(group, [fonts]), ...] für Regeln, deren Stichwort im Text vorkommt.
@@ -1380,8 +1427,10 @@ class MangaSFXDocker(DockWidget):
         if res is None:
             return
         group, keywords, fonts = res
+        # neue Regel gehört zur aktuell aktiven Regelsprache
         self._font_rules.append(
-            {"group": group, "keywords": keywords, "fonts": fonts})
+            {"group": group, "keywords": keywords, "fonts": fonts,
+             "lang": self._rule_lang})
         save_font_rules(self._font_rules)
         self._rebuild_rules()
         self._refresh_suggestions(self.text_input.text())
@@ -1681,10 +1730,12 @@ class MangaSFXDocker(DockWidget):
             fontlist = [str(f).strip() for f in fonts if str(f).strip()]
             if not keywords or not fontlist:
                 continue
+            lang = str(r.get("lang", "")).strip() or "*"   # alt -> "*" = immer
             out.append({
                 "group": str(r.get("group", "")).strip(),
                 "keywords": keywords,
                 "fonts": fontlist,
+                "lang": lang,
             })
         return out
 

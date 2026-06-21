@@ -16,6 +16,7 @@ _KEY_SETTINGS = "last_settings"
 _KEY_LANG = "language"
 _KEY_VIEW = "view"
 _KEY_USAGE = "usage"
+_KEY_RULE_LANG = "rule_lang"
 
 
 def load_user_presets():
@@ -68,10 +69,13 @@ def load_font_rules():
         kws = r.get("keywords", [])
         fonts = r.get("fonts", [])
         if isinstance(kws, list) and isinstance(fonts, list):
+            # "lang": Regelsprache; fehlt sie (alte Daten) -> "*" = immer aktiv,
+            # damit alte Regeln nicht verschwinden.
             rules.append({
                 "group": str(r.get("group", "")),
                 "keywords": [str(k) for k in kws],
                 "fonts": [str(f) for f in fonts],
+                "lang": str(r.get("lang", "*")) or "*",
             })
     return rules
 
@@ -80,6 +84,18 @@ def save_font_rules(rules):
     """Schreibt die Font-Vorschlagsregeln in die Krita-Einstellungen."""
     Krita.instance().writeSetting(
         _GROUP, _KEY_RULES, json.dumps(rules, ensure_ascii=False))
+
+
+def load_rule_lang(default="en"):
+    """Aktive Regelsprache (welche SFX-Regeln gelten). 'default' wenn nichts
+    gespeichert ist."""
+    val = Krita.instance().readSetting(_GROUP, _KEY_RULE_LANG, "")
+    return val if val else default
+
+
+def save_rule_lang(lang):
+    """Speichert die aktive Regelsprache."""
+    Krita.instance().writeSetting(_GROUP, _KEY_RULE_LANG, str(lang))
 
 
 def load_language(default="en"):
