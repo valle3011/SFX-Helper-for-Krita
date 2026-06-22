@@ -43,6 +43,51 @@ RULE_LANG_NAMES = {
 from .i18n import tr, LANGUAGES
 
 
+# ---------------------------------------------------------------------------
+# Mausrad-sichere Widgets
+#
+# Combos/Spins/Slider ändern ihren Wert bei einem Mausrad-Tick auch dann, wenn
+# sie nur zufällig unter dem Cursor liegen, während man das Panel scrollt – das
+# verstellt versehentlich Schrift/Größe/Regelsprache. Diese Unterklassen
+# reagieren nur auf das Rad, wenn sie wirklich den Fokus haben; sonst wird das
+# Ereignis weitergereicht (die ScrollArea scrollt dann).
+# ---------------------------------------------------------------------------
+class NoScrollComboBox(QComboBox):
+    def __init__(self, *a, **k):
+        super().__init__(*a, **k)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def wheelEvent(self, e):
+        if self.hasFocus():
+            super().wheelEvent(e)
+        else:
+            e.ignore()
+
+
+class NoScrollSpinBox(QSpinBox):
+    def __init__(self, *a, **k):
+        super().__init__(*a, **k)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def wheelEvent(self, e):
+        if self.hasFocus():
+            super().wheelEvent(e)
+        else:
+            e.ignore()
+
+
+class NoScrollSlider(QSlider):
+    def __init__(self, *a, **k):
+        super().__init__(*a, **k)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def wheelEvent(self, e):
+        if self.hasFocus():
+            super().wheelEvent(e)
+        else:
+            e.ignore()
+
+
 # Gedehnte SFX-Schreibweisen normalisieren, damit "BOOOOM", "BOOM" und
 # "GASHAAAN" alle gleich behandelt werden.
 _RUN_RE = re.compile(r"(.)\1+")          # jede Wiederholung eines Zeichens
@@ -347,7 +392,7 @@ class MangaSFXDocker(DockWidget):
         # --- Sprachauswahl --------------------------------------------
         lang_row = QHBoxLayout()
         lang_row.addWidget(QLabel(self.t("lang_label") + ":"))
-        self.lang_combo = QComboBox()
+        self.lang_combo = NoScrollComboBox()
         for code, label in LANGUAGES:
             self.lang_combo.addItem(label, code)
         li = self.lang_combo.findData(self._lang)
@@ -380,7 +425,7 @@ class MangaSFXDocker(DockWidget):
         vgrid.setHorizontalSpacing(8)
         self.v_preview_chk = QCheckBox(self.t("view_preview"))
         self.v_preview_chk.setChecked(bool(self._view["preview_show"]))
-        self.v_preview_h = QSpinBox()
+        self.v_preview_h = NoScrollSpinBox()
         self.v_preview_h.setRange(28, 600)
         self.v_preview_h.setSingleStep(8)
         self.v_preview_h.setSuffix(" px")
@@ -501,11 +546,11 @@ class MangaSFXDocker(DockWidget):
         layout.addWidget(self.shadow_btn)
         layout.addWidget(QLabel(self.t("shadow_offset")))
         sh_row = QHBoxLayout()
-        self.shadow_dx = QSpinBox()
+        self.shadow_dx = NoScrollSpinBox()
         self.shadow_dx.setRange(-100, 100)
         self.shadow_dx.setValue(int(DEFAULTS.get("shadow_dx", 6)))
         self.shadow_dx.valueChanged.connect(lambda _v: self._update_preview())
-        self.shadow_dy = QSpinBox()
+        self.shadow_dy = NoScrollSpinBox()
         self.shadow_dy.setRange(-100, 100)
         self.shadow_dy.setValue(int(DEFAULTS.get("shadow_dy", 6)))
         self.shadow_dy.valueChanged.connect(lambda _v: self._update_preview())
@@ -540,7 +585,7 @@ class MangaSFXDocker(DockWidget):
         rl_row = QHBoxLayout()
         self.lbl_rule_lang = QLabel(self.t("rule_lang"))
         rl_row.addWidget(self.lbl_rule_lang)
-        self.rule_lang_combo = QComboBox()
+        self.rule_lang_combo = NoScrollComboBox()
         for code in RULE_LANGS:
             self.rule_lang_combo.addItem(RULE_LANG_NAMES.get(code, code), code)
         ri = self.rule_lang_combo.findData(self._rule_lang)
@@ -702,10 +747,10 @@ class MangaSFXDocker(DockWidget):
         """Erzeugt 'Überschrift + Slider + SpinBox' und synchronisiert beide."""
         parent_layout.addWidget(self._heading(title))
         row = QHBoxLayout()
-        slider = QSlider(Qt.Horizontal)
+        slider = NoScrollSlider(Qt.Horizontal)
         slider.setRange(lo, hi)
         slider.setValue(value)
-        spin = QSpinBox()
+        spin = NoScrollSpinBox()
         spin.setRange(lo, hi)
         spin.setValue(value)
         slider.valueChanged.connect(spin.setValue)
@@ -1034,7 +1079,7 @@ class MangaSFXDocker(DockWidget):
     # ==================================================================
     def _build_font_combo(self):
         """Dropdown mit Favoriten + allen System-Fonts, durchsuchbar."""
-        combo = QComboBox()
+        combo = NoScrollComboBox()
         combo.setEditable(True)
         combo.setInsertPolicy(QComboBox.NoInsert)
 
@@ -1747,13 +1792,25 @@ class MangaSFXDocker(DockWidget):
         self._user_presets.extend(imported)
 
     def _merge_rules(self, imported):
-        """Fügt importierte Regeln hinzu, ohne exakte Duplikate."""
-        def sig(r):
-            return ((r.get("group") or ""),
-                    tuple(r.get("keywords", [])),
-                    tuple(r.get("fonts", [])))
-        existing = {sig(r) for r in self._font_rules}
+        """Fügt importierte Regeln hinzu. Gibt es bereits eine eigene Regel mit
+        gleicher (Gruppe, Sprache), werden Stichwörter und Fonts dort vereinigt
+        (statt eine zweite Regel mit gleicher Gruppe anzulegen); sonst wird die
+        Regel angehängt. So bleibt die Liste beim mehrfachen Import sauber."""
+        def key(r):
+            return ((r.get("group") or "").strip().lower(), r.get("lang") or "*")
+        index = {}
+        for i, r in enumerate(self._font_rules):
+            index.setdefault(key(r), i)
         for r in imported:
-            if sig(r) not in existing:
+            k = key(r)
+            if k in index:
+                tgt = self._font_rules[index[k]]
+                for kw in r.get("keywords", []):
+                    if kw not in tgt["keywords"]:
+                        tgt["keywords"].append(kw)
+                for f in r.get("fonts", []):
+                    if f not in tgt["fonts"]:
+                        tgt["fonts"].append(f)
+            else:
+                index[k] = len(self._font_rules)
                 self._font_rules.append(r)
-                existing.add(sig(r))

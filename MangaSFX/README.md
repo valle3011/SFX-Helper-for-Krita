@@ -258,9 +258,16 @@ permanently.
 **Back up / share presets & rules:** at the bottom of the docker, **Export…**
 writes your own presets + font rules (incl. groups) to a `.json` file;
 **Import…** reads them back – either *Merge* (add to what exists; a preset with
-the same name is replaced, exact duplicate rules are skipped) or *Replace*
-(overwrite all of your own with the file). Handy for backups or moving between
-machines. Built-in presets from `config.py` are not affected.
+the same name is replaced, and rules with the same group + language are unioned
+instead of duplicated) or *Replace* (overwrite all of your own with the file).
+Handy for backups or moving between machines. Built-in presets from `config.py`
+are not affected.
+
+**Rule packs:** a file that contains only `font_rules` works too – choose
+*Merge* and it just adds those rules without touching your presets/settings. A
+ready-made pack built from CYL's Manga SFX cheat sheet ships as
+`sfx-rules-cyl.json` (repo root); its rules use `lang: "*"` so they show under
+every rule language. The referenced fonts must be installed.
 
 After editing `config.py`, a **Krita restart** is enough.
 
